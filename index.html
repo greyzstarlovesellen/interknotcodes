@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f4fc">
+  <meta name="description" content="Central não oficial de códigos de Zenless Zone Zero. Copie os códigos ou abra o resgate oficial.">
+  <title>Inter-Knot Codes — Códigos ZZZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ramielle-theme.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Signal, início">
+      <span class="brand-mark">IK<span>✳</span></span>
+      <span class="brand-name">INTER-KNOT<span>CODES</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="#codes">CÓDIGOS</a><a href="#how">COMO USAR</a>
+    </nav>
+    <a class="top-cta" href="https://zenless.hoyoverse.com/redemption" target="_blank" rel="noopener noreferrer">SITE OFICIAL <span>↗</span></a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> INTER-KNOT // CENTRAL DE CÓDIGOS</div>
+        <h1>RECOMPENSAS<br>NA <span>ESCUTA</span></h1>
+        <p class="hero-text">Seu sinal para os últimos códigos de Zenless Zone Zero.<br>Copie em um toque ou vá direto para o resgate oficial.</p>
+        <a class="hero-button" href="#codes">VER CÓDIGOS <span>↓</span></a>
+      </div>
+      <div class="city-scene" aria-hidden="true">
+        <div class="room-window"><span></span></div>
+        <div class="wall-print"><small>INTER-KNOT</small><img class="poster-character" src="assets/inter-knot-poster-chibi.png" alt="Ilustração chibi no cartaz"><i></i></div>
+        <div class="wall-shelf"><span></span><span></span><span></span><b></b></div>
+        <div class="floor-glow"></div>
+        <div class="sofa">
+          <div class="sofa-back"><i></i><i></i><i></i></div>
+          <div class="sofa-arm sofa-arm-left"></div><div class="sofa-arm sofa-arm-right"></div>
+          <div class="sofa-seat"><i></i><i></i></div>
+          <div class="sofa-pillow"></div>
+          <div class="sofa-foot sofa-foot-left"></div><div class="sofa-foot sofa-foot-right"></div>
+        </div>
+        <div class="character-shadow"></div>
+        <div class="character-stage">
+          <div class="character-aura" aria-hidden="true"></div>
+          <img class="hero-character" src="assets/ramielle.gif" alt="Ramielle em versão chibi flutuando">
+        </div>
+        <div class="vertical-label">NEW ERIDU // 24H SIGNAL</div>
+        <div class="scene-tag"><span>AGENT LOG</span><b>REWARDS<br>DETECTED</b><small>TRANSMISSION STABLE</small></div>
+      </div>
+      <div class="hero-index">01 <span>/</span> 03</div>
+    </section>
+
+    <section class="code-section" id="codes">
+      <div class="section-heading"><div><div class="eyebrow muted">INBOX // RECOMPENSAS</div><h2>CÓDIGOS <span>ATIVOS</span></h2></div><div class="counter"><strong id="code-count">00</strong><span>SINAIS<br>ENCONTRADOS</span></div></div>
+      <div class="toolbar"><label class="search-box"><span>⌕</span><input id="search" type="search" placeholder="Buscar código ou recompensa..." aria-label="Buscar códigos"><kbd>/</kbd></label></div>
+      <div class="code-list" id="code-list" aria-live="polite"></div>
+      <p class="empty-state" id="empty-state" hidden>Nenhum código encontrado. Tente outra busca.</p>
+      <p class="disclaimer">CÓDIGOS PODEM EXPIRAR. CONFIRA A VALIDADE ANTES DE RESGATAR. ESTA É UMA PÁGINA DE FÃ, SEM VÍNCULO COM A HOYOVERSE.</p>
+    </section>
+
+    <section class="how-section" id="how"><div class="how-title"><div class="eyebrow muted">RÁPIDO COMO UM RECADO</div><h2>RESGATE EM<br><span>3 PASSOS.</span></h2></div><div class="steps"><article><b>01</b><h3>ESCOLHA</h3><p>Encontre um código ativo na lista.</p></article><article><b>02</b><h3>ABRA OU COPIE</h3><p>Abra o resgate já com o código, ou copie para usar depois.</p></article><article><b>03</b><h3>RESGATE</h3><p>Entre na sua conta HoYoverse e confirme o servidor e personagem.</p></article></div></section>
+  </main>
+  <footer><a class="brand" href="#top"><span class="brand-mark">IK<span>✳</span></span><span class="brand-name">INTER-KNOT<span>CODES</span></span></a><span>UM SINAL DA COMUNIDADE PARA A COMUNIDADE.</span><a href="https://zenless.hoyoverse.com/redemption" target="_blank" rel="noopener noreferrer">RESGATE OFICIAL ↗</a></footer>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="codes-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
