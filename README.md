@@ -8,11 +8,13 @@ Cloudflare Pages é uma opção adequada para este protótipo: conecte este repo
 
 ## Gerenciar códigos
 
-A página pública é somente leitura: não oferece controles para adicionar ou remover códigos, e não salva alterações no navegador. Para atualizar a lista, edite `window.INTER_KNOT_CODES` em `codes-data.js` e publique uma nova versão. Cada código tem uma lista de recompensas com nome, quantidade e ícone (`assets/icons/`). Use `expiresAt` para uma data e hora ISO 8601 com fuso horário, ou `expiryStatus: 'permanent'` / `'undetermined'` para os estados correspondentes.
+A página pública é somente leitura: não oferece controles para adicionar ou remover códigos. Para atualizar a lista, edite `window.INTER_KNOT_CODES` em `codes-data.js` e publique uma nova versão. Cada código tem uma lista de recompensas com nome, quantidade e ícone (`assets/icons/`). Use `expiresAt` para uma data e hora ISO 8601 com fuso horário, ou `expiryStatus: 'permanent'` / `'undetermined'` para os estados correspondentes.
 
 ## Atualizar códigos
 
-Não há cadastro ou sistema de contas no site. Para adicionar, atualizar ou remover códigos, edite `window.INTER_KNOT_CODES` em `codes-data.js` e publique os arquivos atualizados. Cada entrada pode incluir o código, recompensa, validade e status.
+O botão **Minha conta** abre um perfil local sem senha ou serviço de nuvem. O usuário pode marcar códigos como resgatados, consultar o histórico e somar os Policromos registrados. Os dados ficam no `localStorage` do navegador, não são protegidos por autenticação, não sincronizam entre dispositivos e podem ser apagados ao limpar os dados do navegador. O site não verifica os resgates junto à HoYoverse; o histórico é preenchido manualmente.
+
+Para adicionar, atualizar ou remover códigos, edite `window.INTER_KNOT_CODES` em `codes-data.js` e publique os arquivos atualizados. Cada entrada pode incluir o código, recompensa, validade e status.
 
 Cada botão **Resgatar** abre `https://zenless.hoyoverse.com/redemption?code=...`, o portal oficial de resgate. Os códigos podem expirar ou depender de região/conta; esta página não verifica validade junto à HoYoverse.
 
