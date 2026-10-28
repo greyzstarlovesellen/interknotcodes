@@ -1,6 +1,26 @@
 const redemptionUrl = 'https://zenless.hoyoverse.com/redemption';
-// Lista pública e somente leitura. Atualize aqui e publique uma nova versão do site.
-const codes = window.INTER_KNOT_CODES || [];
+// A lista base é pública. O painel administrativo mantém alterações locais e pode exportar o arquivo para publicação.
+const baseCodes = window.INTER_KNOT_CODES || [];
+const codeManagerStorageKey = 'interKnotManagedCodes';
+const adminNicknames = new Set(['hansogrey', 'omegalol-chan', 'guangzinha']);
+const rewardCatalog = [
+  { name: 'Policromos', icon: 'polychrome' },
+  { name: 'Dennies', icon: 'denny' },
+  { name: 'Official Investigator Log', icon: 'investigator-log-clear' },
+  { name: 'W-Engine Power Supply', icon: 'w-engine' },
+  { name: 'Bangboo Algorithm Module', icon: 'bangboo-module' }
+];
+function normalizeCode(value) { return String(value || '').trim().toLocaleLowerCase('pt-BR'); }
+function readCodeManagerState() {
+  try { return JSON.parse(localStorage.getItem(codeManagerStorageKey) || '{"added":[],"expired":[]}'); }
+  catch { return { added: [], expired: [] }; }
+}
+const codeManagerState = readCodeManagerState();
+const manualExpiredCodes = new Set(codeManagerState.expired || []);
+const codes = [
+  ...baseCodes.map(item => ({ ...item, reward: [...item.reward], expired: manualExpiredCodes.has(normalizeCode(item.code)) })),
+  ...(codeManagerState.added || []).filter(item => !baseCodes.some(base => normalizeCode(base.code) === normalizeCode(item.code)))
+];
 const list = document.querySelector('#code-list');
 const count = document.querySelector('#code-count');
 const empty = document.querySelector('#empty-state');
@@ -23,6 +43,21 @@ function activeProfileData() {
   if (!activeProfile) return null;
   return loadProfiles()[activeProfile] || null;
 }
+function hasAdminAccess() { return adminNicknames.has(profileKey(activeProfile)); }
+function isCodeExpired(item) {
+  return Boolean(item.expired || (item.expiresAt && new Date(item.expiresAt).getTime() <= Date.now()));
+}
+function saveCodeManagerState() {
+  const additions = codes.filter(item => !baseCodes.some(base => normalizeCode(base.code) === normalizeCode(item.code)));
+  const expired = codes.filter(item => item.expired).map(item => normalizeCode(item.code));
+  try {
+    localStorage.setItem(codeManagerStorageKey, JSON.stringify({ added: additions, expired }));
+    return true;
+  } catch {
+    showToast('ARMAZENAMENTO LOCAL INDISPONÍVEL');
+    return false;
+  }
+}
 function setSiteView(view) {
   const accountView = document.querySelector('#account-view');
   const siteSections = [...document.querySelectorAll('main > .hero, main > .code-section, main > .how-section')];
@@ -34,6 +69,7 @@ function setSiteView(view) {
     const profile = activeProfileData();
     document.querySelector('#login-panel').hidden = Boolean(profile);
     document.querySelector('#history-panel').hidden = !profile;
+    document.querySelector('#manage-codes-button').hidden = !hasAdminAccess();
     if (profile) renderHistory(profile);
     history.replaceState(null, '', '#account');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -105,7 +141,7 @@ function formatExpiry(item) {
 function daysUntil(value) { return Math.ceil((new Date(value) - new Date()) / 86400000); }
 function render() {
   const query = search.value.trim().toLowerCase();
-  const visible = codes.filter(item => `${item.code} ${item.reward.map(reward => reward.name).join(' ')}`.toLowerCase().includes(query));
+  const visible = codes.filter(item => !isCodeExpired(item) && `${item.code} ${item.reward.map(reward => reward.name).join(' ')}`.toLowerCase().includes(query));
   count.textContent = String(visible.length).padStart(2, '0');
   empty.hidden = visible.length !== 0;
   list.replaceChildren(...visible.map(item => {
@@ -154,6 +190,72 @@ function showToast(message) {
   const toast = document.querySelector('#toast'); toast.textContent = message; toast.classList.add('show');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2300);
 }
+function addRewardRow(defaultReward = rewardCatalog[0], amount = '') {
+  const rows = document.querySelector('#manager-reward-rows');
+  const row = document.createElement('div'); row.className = 'manager-reward-row';
+  const icon = document.createElement('img'); icon.className = 'manager-reward-icon'; icon.src = `assets/icons/${defaultReward.icon}.png`; icon.alt = '';
+  const select = document.createElement('select'); select.className = 'manager-reward-type'; select.setAttribute('aria-label', 'Tipo de recompensa');
+  rewardCatalog.forEach(item => {
+    const option = document.createElement('option'); option.value = item.icon; option.textContent = item.name; option.selected = item.icon === defaultReward.icon; select.append(option);
+  });
+  const quantity = document.createElement('input'); quantity.className = 'manager-reward-amount'; quantity.type = 'text'; quantity.inputMode = 'decimal'; quantity.required = true; quantity.maxLength = 12; quantity.placeholder = 'Quantidade'; quantity.value = amount; quantity.setAttribute('aria-label', 'Quantidade da recompensa');
+  const remove = document.createElement('button'); remove.className = 'remove-reward-row'; remove.type = 'button'; remove.textContent = '×'; remove.setAttribute('aria-label', 'Remover recompensa');
+  remove.addEventListener('click', () => { if (rows.children.length > 1) row.remove(); });
+  select.addEventListener('change', () => {
+    const selected = rewardCatalog.find(item => item.icon === select.value);
+    icon.src = `assets/icons/${selected.icon}.png`;
+  });
+  row.append(icon, select, quantity, remove); rows.append(row);
+}
+function renderManagedCodes() {
+  const container = document.querySelector('#managed-codes-list');
+  container.replaceChildren(...codes.map(item => {
+    const expiredByDate = Boolean(item.expiresAt && new Date(item.expiresAt).getTime() <= Date.now());
+    const row = document.createElement('article'); row.className = `managed-code-row${isCodeExpired(item) ? ' expired' : ''}`;
+    const info = document.createElement('div'); info.className = 'managed-code-info';
+    const name = document.createElement('strong'); name.textContent = item.code;
+    const rewardSummary = document.createElement('span'); rewardSummary.textContent = item.reward.map(reward => `×${reward.amount} ${reward.name}`).join(' · ');
+    const status = document.createElement('small'); status.textContent = item.expired ? 'EXPIRADO MANUALMENTE' : expiredByDate ? 'DATA DE VALIDADE ENCERRADA' : 'ATIVO';
+    info.append(name, rewardSummary, status);
+    const action = document.createElement('button'); action.type = 'button';
+    if (expiredByDate && !item.expired) {
+      action.textContent = 'DATA ENCERRADA'; action.disabled = true;
+    } else {
+      action.textContent = item.expired ? 'REATIVAR' : 'EXPIRAR';
+      action.addEventListener('click', () => {
+        item.expired = !item.expired;
+        if (saveCodeManagerState()) { render(); renderManagedCodes(); showToast(item.expired ? `${item.code} EXPIRADO` : `${item.code} REATIVADO`); }
+      });
+    }
+    row.append(info, action); return row;
+  }));
+}
+function openCodeManager() {
+  if (!hasAdminAccess()) { showToast('ACESSO NÃO AUTORIZADO'); return; }
+  document.querySelector('#manager-form').reset();
+  document.querySelector('#manager-reward-rows').replaceChildren();
+  addRewardRow();
+  document.querySelector('#manager-expiry-date').hidden = true;
+  document.querySelector('#manager-expiry-date').required = false;
+  document.querySelector('#expiry-date-label').hidden = true;
+  renderManagedCodes();
+  document.querySelector('#code-manager-dialog').showModal();
+}
+function downloadCodesData() {
+  const exportedCodes = codes.map(({ code, reward, expiresAt, expiryStatus, expired }) => {
+    const result = { code, reward };
+    if (expiresAt) result.expiresAt = expiresAt;
+    if (expiryStatus) result.expiryStatus = expiryStatus;
+    if (expired) result.expired = true;
+    return result;
+  });
+  const output = `// Lista pública do site. Atualize aqui os códigos confirmados e publique uma nova versão.\nwindow.INTER_KNOT_CODES = ${JSON.stringify(exportedCodes, null, 2)};\n`;
+  const file = new Blob([output], { type: 'text/javascript;charset=utf-8' });
+  const url = URL.createObjectURL(file);
+  const link = document.createElement('a'); link.href = url; link.download = 'codes-data.js'; link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('ARQUIVO CODES-DATA.JS EXPORTADO');
+}
 search.addEventListener('input', render);
 document.querySelector('#account-link').addEventListener('click', () => setSiteView('account'));
 document.querySelector('#account-back').addEventListener('click', () => setSiteView('site'));
@@ -172,6 +274,48 @@ document.querySelector('#login-form').addEventListener('submit', event => {
   activeProfile = key; localStorage.setItem(activeProfileKey, key);
   render(); setSiteView('account');
 });
+document.querySelector('#manage-codes-button').addEventListener('click', openCodeManager);
+document.querySelector('#manager-close').addEventListener('click', () => document.querySelector('#code-manager-dialog').close());
+document.querySelector('#code-manager-dialog').addEventListener('click', event => {
+  if (event.target === event.currentTarget) event.currentTarget.close();
+});
+document.querySelector('#add-reward-row').addEventListener('click', () => addRewardRow());
+document.querySelector('#manager-expiry').addEventListener('change', event => {
+  const useDate = event.target.value === 'date';
+  document.querySelector('#manager-expiry-date').hidden = !useDate;
+  document.querySelector('#expiry-date-label').hidden = !useDate;
+  document.querySelector('#manager-expiry-date').required = useDate;
+});
+document.querySelector('#manager-form').addEventListener('submit', event => {
+  event.preventDefault();
+  if (!hasAdminAccess()) { showToast('ACESSO NÃO AUTORIZADO'); return; }
+  const code = document.querySelector('#manager-code').value.trim();
+  if (codes.some(item => normalizeCode(item.code) === normalizeCode(code))) { showToast('ESSE CÓDIGO JÁ ESTÁ CADASTRADO'); return; }
+  const reward = [...document.querySelectorAll('.manager-reward-row')].map(row => {
+    const selected = rewardCatalog.find(item => item.icon === row.querySelector('.manager-reward-type').value);
+    return { name: selected.name, amount: row.querySelector('.manager-reward-amount').value.trim(), icon: selected.icon };
+  }).filter(item => item.amount);
+  if (!reward.length) { showToast('ADICIONE PELO MENOS UMA RECOMPENSA'); return; }
+  const expiry = document.querySelector('#manager-expiry').value;
+  const newCode = { code, reward, expiryStatus: 'undetermined', expired: false };
+  if (expiry === 'permanent') newCode.expiryStatus = 'permanent';
+  if (expiry === 'date') {
+    const input = document.querySelector('#manager-expiry-date').value;
+    const date = new Date(`${input}:00+08:00`);
+    if (!input || Number.isNaN(date.getTime())) { showToast('INFORME UMA DATA DE VALIDADE VÁLIDA'); return; }
+    newCode.expiresAt = date.toISOString(); delete newCode.expiryStatus;
+  }
+  codes.push(newCode);
+  if (saveCodeManagerState()) {
+    render(); renderManagedCodes();
+    document.querySelector('#manager-form').reset();
+    document.querySelector('#manager-reward-rows').replaceChildren(); addRewardRow();
+    document.querySelector('#manager-expiry-date').required = false;
+    document.querySelector('#manager-expiry-date').hidden = true; document.querySelector('#expiry-date-label').hidden = true;
+    showToast(`${code} ADICIONADO NESTE NAVEGADOR`);
+  }
+});
+document.querySelector('#export-codes').addEventListener('click', downloadCodesData);
 document.querySelector('.brand').addEventListener('click', event => { event.preventDefault(); setSiteView('site'); });
 window.addEventListener('hashchange', () => {
   if (location.hash === '#account') setSiteView('account');
@@ -182,5 +326,5 @@ window.addEventListener('hashchange', () => {
   }
 });
 document.addEventListener('keydown', event => { if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { event.preventDefault(); search.focus(); } });
-document.querySelector('#account-link').textContent = activeProfileData() ? 'MINHA CONTA' : 'MINHA CONTA';
+document.querySelector('#manage-codes-button').hidden = !hasAdminAccess();
 render();

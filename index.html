@@ -82,7 +82,7 @@
         <p class="local-notice">Sem senha e sem nuvem. O nome não protege o perfil: os dados ficam neste navegador e não sincronizam com outros dispositivos.</p>
       </div>
       <div class="account-panel history-panel" id="history-panel" hidden>
-        <div class="history-header"><div><div class="eyebrow muted">AGENT LOG // HISTÓRICO LOCAL</div><h2>OLÁ, <span id="profile-name"></span></h2></div><button class="account-logout" id="account-logout" type="button">TROCAR PERFIL</button></div>
+        <div class="history-header"><div><div class="eyebrow muted">AGENT LOG // HISTÓRICO LOCAL</div><h2>OLÁ, <span id="profile-name"></span></h2></div><div class="history-actions"><button class="manage-codes-button" id="manage-codes-button" type="button" hidden>GERENCIAR CÓDIGOS <span>✳</span></button><button class="account-logout" id="account-logout" type="button">TROCAR PERFIL</button></div></div>
         <div class="poly-total"><img src="assets/icons/polychrome.png" alt=""><div><span>POLICROMOS REGISTRADOS</span><strong id="poly-total">0</strong></div></div>
         <div class="history-heading"><h3>CÓDIGOS RESGATADOS</h3><span id="history-count">00 REGISTROS</span></div>
         <div class="history-list" id="history-list"></div>
@@ -91,6 +91,32 @@
       </div>
     </section>
   </main>
+  <dialog class="code-manager-dialog" id="code-manager-dialog" aria-labelledby="manager-title">
+    <div class="manager-content">
+      <button class="manager-close" id="manager-close" type="button" aria-label="Fechar">×</button>
+      <div class="eyebrow muted">INTER-KNOT // PAINEL DE OPERAÇÕES</div>
+      <h2 id="manager-title">GERENCIAR<br><span>CÓDIGOS</span></h2>
+      <p class="manager-notice">As alterações ficam salvas neste navegador. Para publicar para todos, exporte o arquivo e atualize <code>codes-data.js</code> no GitHub.</p>
+      <form id="manager-form">
+        <label for="manager-code">CÓDIGO</label>
+        <input id="manager-code" name="code" maxlength="40" required placeholder="Ex.: NEWERIDU2026" autocomplete="off">
+        <label for="manager-expiry">VALIDADE</label>
+        <select id="manager-expiry" name="expiry">
+          <option value="undetermined">Indeterminada</option>
+          <option value="permanent">Permanente, sem expiração</option>
+          <option value="date">Data e hora (UTC+8)</option>
+        </select>
+        <label for="manager-expiry-date" id="expiry-date-label" hidden>EXPIRA EM (UTC+8)</label>
+        <input id="manager-expiry-date" name="expiryDate" type="datetime-local" hidden>
+        <div class="manager-reward-heading"><span>RECOMPENSAS</span><button id="add-reward-row" type="button">+ ADICIONAR ITEM</button></div>
+        <div class="manager-reward-rows" id="manager-reward-rows"></div>
+        <button class="manager-submit" type="submit">ADICIONAR CÓDIGO <span>↗</span></button>
+      </form>
+      <div class="managed-list-heading"><h3>CÓDIGOS CADASTRADOS</h3><button id="export-codes" type="button">EXPORTAR CODES-DATA.JS ↓</button></div>
+      <div class="managed-codes-list" id="managed-codes-list"></div>
+      <p class="manager-footnote">O acesso por nickname só controla a interface. Como o site é estático, qualquer pessoa pode digitar um dos nomes autorizados; isso não é uma barreira de segurança.</p>
+    </div>
+  </dialog>
   <footer><a class="brand" href="#top"><span class="brand-mark">IK<span>✳</span></span><span class="brand-name">INTER-KNOT<span>CODES</span></span></a><span>UM SINAL DA COMUNIDADE PARA A COMUNIDADE.</span><a href="https://zenless.hoyoverse.com/redemption" target="_blank" rel="noopener noreferrer">RESGATE OFICIAL ↗</a></footer>
 
   <div class="toast" id="toast" role="status"></div>

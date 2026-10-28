@@ -14,6 +14,8 @@ A página pública é somente leitura: não oferece controles para adicionar ou 
 
 O botão **Minha conta** abre um perfil local sem senha ou serviço de nuvem. O usuário pode marcar códigos como resgatados, consultar o histórico e somar os Policromos registrados. Os dados ficam no `localStorage` do navegador, não são protegidos por autenticação, não sincronizam entre dispositivos e podem ser apagados ao limpar os dados do navegador. O site não verifica os resgates junto à HoYoverse; o histórico é preenchido manualmente.
 
+Os perfis com nicknames `hansogrey`, `omegalol-chan` e `guangzinha` veem o painel local de gerenciamento. Como a hospedagem é estática, o nickname não comprova identidade e qualquer pessoa pode digitá-lo. Códigos adicionados ou expirados no painel só afetam aquele navegador. Use **Exportar codes-data.js** no painel e publique o arquivo no repositório para que a alteração apareça para todos. Os ícones disponíveis são os cinco arquivos existentes em `assets/icons/`.
+
 Para adicionar, atualizar ou remover códigos, edite `window.INTER_KNOT_CODES` em `codes-data.js` e publique os arquivos atualizados. Cada entrada pode incluir o código, recompensa, validade e status.
 
 Cada botão **Resgatar** abre `https://zenless.hoyoverse.com/redemption?code=...`, o portal oficial de resgate. Os códigos podem expirar ou depender de região/conta; esta página não verifica validade junto à HoYoverse.

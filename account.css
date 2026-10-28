@@ -40,3 +40,31 @@
 .card-actions{flex-wrap:wrap}
 @media(max-width:850px){.card-actions{flex-direction:column;align-items:stretch}.redeemed-button{width:100%}}
 @media(max-width:650px){.top-actions{gap:6px}.account-link{height:34px;padding:0 8px;font-size:7px;letter-spacing:.4px}.top-cta{padding:9px 8px;font-size:7px}.account-view{padding:96px 6% 54px}.account-panel{margin-top:30px;padding:24px 19px}.account-panel h2{font-size:58px}.history-header{align-items:flex-start;flex-direction:column}.history-header h2{font-size:46px}.account-logout{align-self:flex-end}.poly-total{margin:20px 0;padding:14px}.poly-total img{width:52px;height:52px}.poly-total strong{font-size:38px}.history-item{grid-template-columns:1fr;gap:9px;padding:11px}.history-rewards img{width:22px;height:22px}.redeemed-button{height:36px;min-width:0;padding:4px 5px;font-size:7px}.code-card .card-actions{grid-column:2;grid-row:1;gap:6px}.code-card .copy-button,.code-card .redeem-button,.code-card .redeemed-button{height:36px;min-width:0;padding:4px 6px;font-size:7px}.code-card .redeem-label strong{font-size:10px}.code-card .redeem-arrow{width:22px;height:22px}}
+.history-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.manage-codes-button{padding:10px 13px;border:1px solid #e875af;background:linear-gradient(115deg,#f3a2c9,#e982b7 58%,#d972ad);color:#29264d;font:700 8px var(--mono);letter-spacing:.5px;cursor:pointer;box-shadow:0 4px 13px #ce72a222}
+.manage-codes-button:hover{filter:saturate(1.12);transform:translateY(-1px)}.manage-codes-button span{margin-left:6px}
+.code-manager-dialog{width:min(760px,calc(100% - 24px));max-width:760px;max-height:min(90vh,900px);overflow:auto;border:1px solid #d8cddd;background:#fffaf2;color:#29264d;box-shadow:0 24px 100px #39304b55}
+.code-manager-dialog::backdrop{background:#28244986;backdrop-filter:blur(6px)}
+.manager-content{position:relative;padding:clamp(22px,4vw,40px)}
+.manager-close{position:absolute;right:18px;top:14px;border:0;background:none;color:#77748a;font-size:30px;cursor:pointer}
+.manager-content h2{margin:18px 0 10px;color:#20234d;font:800 clamp(44px,7vw,68px)/.86 var(--display)}.manager-content h2 span{color:#e56fb1}
+.manager-notice,.manager-footnote{color:#77748a;font:9px/1.8 var(--mono)}.manager-notice{max-width:600px;margin:0 0 22px}.manager-notice code{color:#a84b81}
+#manager-form{display:grid;gap:8px;padding:18px;border:1px solid #e5dce8;background:#fffdfb}
+#manager-form>label{margin-top:5px;color:#696681;font:8px var(--mono);letter-spacing:1px}
+#manager-code,#manager-expiry,#manager-expiry-date,.manager-reward-type,.manager-reward-amount{width:100%;height:40px;padding:0 10px;border:1px solid #d8d1e2;background:#f8f3fb;color:#29264d;font:11px var(--mono);outline:none}
+#manager-code:focus,#manager-expiry:focus,#manager-expiry-date:focus,.manager-reward-type:focus,.manager-reward-amount:focus{border-color:#e982b7;box-shadow:0 0 0 3px #e982b71c}
+.manager-reward-heading,.managed-list-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;color:#696681;font:8px var(--mono);letter-spacing:1px}
+.manager-reward-heading button,.managed-list-heading button{padding:8px 9px;border:1px solid #d8d1e2;background:#fff8;color:#686681;font:7px var(--mono);letter-spacing:.5px;cursor:pointer}
+.manager-reward-heading button:hover,.managed-list-heading button:hover{border-color:#e982b7;color:#a84b81}
+.manager-reward-rows{display:grid;gap:7px}
+.manager-reward-row{display:grid;grid-template-columns:34px minmax(0,1fr) 105px 30px;align-items:center;gap:7px}
+.manager-reward-icon{width:31px;height:31px;object-fit:contain}.manager-reward-type,.manager-reward-amount{height:36px;font-size:9px}
+.remove-reward-row{width:30px;height:32px;border:1px solid #e2d8e4;background:#fff;color:#98738e;font-size:20px;cursor:pointer}.remove-reward-row:hover{border-color:#e982b7;color:#c75b9a}
+.manager-submit{height:43px;margin-top:8px;padding:0 13px;display:flex;align-items:center;justify-content:space-between;border:1px solid #e875af;background:linear-gradient(115deg,#f3a2c9,#e982b7 58%,#d972ad);color:#29264d;font:700 9px var(--mono);letter-spacing:.6px;cursor:pointer}
+.managed-list-heading{margin-top:24px;padding-bottom:9px;border-bottom:1px solid #e1d8e7}.managed-list-heading h3{margin:0;color:#696681;font:8px var(--mono);letter-spacing:1px}
+.managed-codes-list{display:grid;gap:6px;margin-top:10px}
+.managed-code-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid #e5dce8;background:#fffdfb}.managed-code-row.expired{opacity:.74}
+.managed-code-info{display:grid;gap:4px;min-width:0}.managed-code-info strong{color:#29264d;font:500 10px var(--mono);overflow-wrap:anywhere}.managed-code-info>span{color:#77748a;font:8px/1.6 var(--mono)}.managed-code-info small{color:#a85a8a;font:7px var(--mono);letter-spacing:.6px}
+.managed-code-row button{flex:0 0 auto;padding:8px 9px;border:1px solid #d8d1e2;background:#fff8;color:#696681;font:7px var(--mono);letter-spacing:.4px;cursor:pointer}.managed-code-row button:hover:not(:disabled){border-color:#e982b7;color:#a84b81}.managed-code-row button:disabled{opacity:.6;cursor:not-allowed}
+.manager-footnote{margin:17px 0 0}
+@media(max-width:650px){.history-actions{width:100%;justify-content:space-between;gap:6px}.manage-codes-button{padding:9px 8px;font-size:7px}.code-manager-dialog{max-height:92vh}.manager-content{padding:24px 16px}.manager-reward-row{grid-template-columns:28px minmax(0,1fr) 75px 28px;gap:5px}.manager-reward-icon{width:27px;height:27px}.manager-reward-type,.manager-reward-amount{padding:0 6px;font-size:8px}.remove-reward-row{width:28px}.managed-code-row{align-items:flex-start;padding:8px}.managed-code-row button{padding:7px 6px;font-size:6px}.managed-code-info>span{font-size:7px}}
